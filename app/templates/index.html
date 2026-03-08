@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Task Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #0078ff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #005fcc;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .delete-form {
+            margin: 0;
+        }
+
+        .delete-btn {
+            background: #e63946;
+        }
+
+        .delete-btn:hover {
+            background: #c1121f;
+        }
+
+        .empty {
+            text-align: center;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DevOps Task Manager</h1>
+        <p>Add and manage your tasks easily</p>
+
+        <form action="/add" method="POST">
+            <input type="text" name="title" placeholder="Enter a new task" required>
+            <button type="submit">Add Task</button>
+        </form>
+
+        {% if tasks %}
+            <ul>
+                {% for task in tasks %}
+                    <li>
+                        <span>{{ task.title }}</span>
+                        <form class="delete-form" action="/delete/{{ task.id }}" method="POST">
+                            <button class="delete-btn" type="submit">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty">No tasks yet.</div>
+        {% endif %}
+
+        <div class="footer">
+            Flask DevOps Project
+        </div>
+    </div>
+</body>
+</html>
