@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,27 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-task-manager .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-task-manager:latest .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/devops-task-manager
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/devops-task-manager:latest
+
+      - name: Copy Kubernetes files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "k8s/*.yaml"
+          target: "/home/ubuntu/"
+
+      - name: Deploy to Kubernetes
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            kubectl apply -f /home/ubuntu/k8s/deployment.yaml
+            kubectl apply -f /home/ubuntu/k8s/service.yaml
+            kubectl rollout restart deployment flask-app

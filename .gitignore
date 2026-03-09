@@ -1,9 +1,16 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+
+# SSH Keys
+*.pem
+
+# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.env
-.venv/
-venv/
-.idea/
-.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
