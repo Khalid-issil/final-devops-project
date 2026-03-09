@@ -27,8 +27,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "k8s/*.yaml"
-          target: "/home/ubuntu/"
+          source: "k8s/*"
+          target: "/home/ubuntu/k8s/"
 
       - name: Deploy to Kubernetes
         uses: appleboy/ssh-action@v1.0.3
